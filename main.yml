@@ -21,21 +21,21 @@
     - vars/vars.yml
 
   pre_tasks:
-    # - import_tasks: tasks/update.yml
-    # - import_tasks: tasks/user.yml
-    # - import_tasks: tasks/ssh.yml
-    # - import_tasks: tasks/packages.yml
-    # - import_tasks: tasks/configs.yml
+    - import_tasks: tasks/update.yml
+    - import_tasks: tasks/user.yml
+    - import_tasks: tasks/ssh.yml
+    - import_tasks: tasks/packages.yml
+    - import_tasks: tasks/configs.yml
     - import_tasks: tasks/motd.yml
-    # - import_tasks: tasks/ansible.yml
+    - import_tasks: tasks/ansible.yml
     - import_tasks: tasks/docker.yml
-    # - import_tasks: tasks/nodejs.yml
+    - import_tasks: tasks/nodejs.yml
 
   roles:
     - geerlingguy.awx
 
-  # tasks:
-  #
-  #   - import_tasks: tasks/harden.yml
-  #   - import_tasks: tasks/restart.yml
-  #     tags: restart
+  tasks:
+
+    - import_tasks: tasks/harden.yml
+    - import_tasks: tasks/restart.yml
+      tags: restart
