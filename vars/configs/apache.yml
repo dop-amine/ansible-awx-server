@@ -1,0 +1,59 @@
+---
+apache_config: |
+  <VirtualHost *:80>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+  </VirtualHost>
+
+  <VirtualHost *:443>
+    ServerName {{ host_name }}
+
+    Include common/{{ app_name }}.ssl
+    #Include common/apache.maintenance
+
+    <IfModule mod_passenger.c>
+      PassengerRuby /home/{{ username }}/.rvm/gems/ruby-{{ ruby_version }}@{{ app_name }}/wrappers/ruby
+      PassengerMaxRequestQueueSize 1000
+      PassengerHighPerformance on
+      PassengerMaxRequests 10000
+    </IfModule>
+
+    RailsEnv production
+
+    # Header below needed for cloudfront assets
+    Header set Access-Control-Allow-Origin "*"
+
+    DocumentRoot /var/www/vhosts/{{ app_name }}/current/public
+    <Directory /var/www/vhosts/{{ app_name }}/current/public>
+      AllowOverride all
+      Options -MultiViews
+      AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript
+    </Directory>
+
+    # For apps with assets, no need for Gate, for example
+    <LocationMatch "^/assets/.*-[0-9a-f]{32}.*$">
+       Header unset ETag
+       FileETag None
+       # RFC says only cache for 1 year
+       ExpiresActive On
+       ExpiresDefault "access plus 1 year"
+      </LocationMatch>
+  </VirtualHost>
+
+apache_mpm_config: |
+  <IfModule mpm_event_module>
+          StartServers            6
+          ServerLimit             18
+          # = passenger concurency, amount of parallel single-tread requests
+          MinSpareThreads         20
+          # MinSpareThreads and MaxSpareThreads define range for creating and killing Apache processes
+          MaxSpareThreads         180
+          # 50% of MaxRequestWorkers
+          ThreadLimit             256
+          # > ThreadsPerChild
+          ThreadsPerChild         40
+          MaxRequestWorkers       720
+          # Server Limit x ThreadsPerChild > PassengerMaxPoolSize * 2
+          MaxConnectionsPerChild  1000
+  </IfModule>
