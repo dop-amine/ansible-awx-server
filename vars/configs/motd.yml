@@ -1,11 +1,11 @@
 ---
 motd: |
   #!/bin/bash
-  echo 'enter name here with ascii maker slant font'
-  echo 'enter name here with ascii maker slant font'
-  echo 'enter name here with ascii maker slant font'
-  echo 'enter name here with ascii maker slant font'
-  echo 'enter name here with ascii maker slant font'
+  echo '    ___    _   _______ ________  __    ______   ___ _       ___  __'
+  echo '   /   |  / | / / ___//  _/ __ )/ /   / ____/  /   | |     / / |/ /'
+  echo '  / /| | /  |/ /\__ \ / // __  / /   / __/    / /| | | /| / /|   / '
+  echo ' / ___ |/ /|  /___/ // // /_/ / /___/ /___   / ___ | |/ |/ //   |  '
+  echo '/_/  |_/_/ |_//____/___/_____/_____/_____/  /_/  |_|__/|__//_/|_|  '
 
   # get free memory
   IFS=" " read USED FREE TOTAL <<<$(free -htm | grep "Mem" | awk {'print $3,$4,$2'})
@@ -37,7 +37,7 @@ motd: |
   blue="\e[1;34m"
   undim="\e[0m"
 
-  services=("icecast")
+  services=("docker" "fail2ban")
 
   service_status=()
   # get status of all services

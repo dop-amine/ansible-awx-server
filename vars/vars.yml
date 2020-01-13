@@ -1,20 +1,19 @@
 ---
 # AWS
-instance_name:
-host_name:
+instance_name: Ansible AWX
+host_name: ansible.tldev2.com
 termination_protection: yes
 aws_profile: "{{ awscli_profile }}"
-key_pair:
+key_pair: AWS_List
 operating_system: Ubuntu 18.04 LTS
 ami_id: ami-0a313d6098716f372
 region: us-east-1
 ec2_volume_size: 20
 type: t3.small
-subnet_id:
-group:
+subnet_id: subnet-2d341a07
+group: JENKINS
 count: 1
-awscli_profile: personal
+awscli_profile: winmo
 
 # OS
 username: deploy
-app_name: 

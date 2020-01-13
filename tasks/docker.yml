@@ -1,0 +1,63 @@
+---
+# Vars: username
+
+- name: Install docker dependencies
+  apt:
+    name: ['apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common']
+    state: present
+
+- name: Add docker apt key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add docker apt repo
+  apt_repository:
+    repo: 'deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable'
+    state: present
+    update_cache: true
+
+- name: Update cache
+  apt:
+    update_cache: yes
+
+- name: Install docker
+  apt:
+    name: docker-ce
+    state: present
+
+- name: Add user to docker group
+  user:
+    name: "{{ username | lower }}"
+    groups: docker
+
+- name: Start docker service
+  service:
+    name: docker
+    state: restarted
+
+- name: Install python-pip
+  apt:
+    name: python-pip
+    state: latest
+
+- name: Uninstall docker-py python module
+  pip:
+    name: docker-py
+    state: absent
+
+- name: Install docker python module
+  pip:
+    name: docker
+    state: present
+
+# - name: Install docker compose
+#   command: sudo curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+#
+# - name: Chmod docker compose dir
+#   command: sudo chmod +x /usr/local/bin/docker-compose
+
+- name: pip install docker compose
+  pip:
+    name: docker-compose
+    state: present
